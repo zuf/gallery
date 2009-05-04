@@ -48,7 +48,7 @@ module GalleryModels
     end
 
     def to_s
-      self.name
+      self.title
     end
   end
 
@@ -78,6 +78,10 @@ module GalleryModels
     def thumb_path(base_path)
       digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}")[(0..8)]
       File.join(base_path, "#{digest}.#{self.extension}")
+    end
+
+    def to_s
+      self.filename
     end
 
     def self.clean_extname(path)
