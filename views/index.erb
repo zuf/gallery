@@ -1,5 +1,5 @@
-<ul>
+<ul class="galleries">
 <% @galleries.each do |gallery| %>
-  <li><a href="/<%= gallery.dir %>"><%= gallery.title %></a></li>
+  <li><a href="<%= gallery_url(gallery) %>"><%= gallery.title %></a></li>
 <% end %>
 </ul>

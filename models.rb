@@ -12,7 +12,7 @@ module GalleryModels
     def self.all(dir)
       galleries = Array.new
 
-      Dir.entries(dir).each do |entry|
+      Dir.entries(dir).sort.each do |entry|
         path = File.join(dir, entry)
         galleries << self.new(path) if !entry.match(/^\./) && File.directory?(path)
       end
@@ -38,7 +38,7 @@ module GalleryModels
       unless @pictures
         @pictures = Array.new
 
-        Dir.entries(self.path).each do |entry|
+        Dir.entries(self.path).sort.each do |entry|
           path = File.join(self.path, entry)
           @pictures << Picture.new(path, :gallery => self) if File.file?(path) && PICTURE_FILETYPES.include?(Picture.clean_extname(path))
         end
@@ -53,12 +53,13 @@ module GalleryModels
   end
 
   class Picture
-    attr_reader :path, :filename, :extension, :gallery, :thumb_size
+    attr_reader :path, :filename, :extension, :title, :gallery, :thumb_size
 
     def initialize(path, options={})
       @path       = path
       @filename   = File.basename(path)
       @extension  = self.class.clean_extname(path)
+      @title      = File.basename(path)
       @gallery    = options[:gallery] || Gallery.new(path[/^(.+?)[^\/]+$/, 1])
       @thumb_size = options[:thumb_size] || DEFAULT_THUMB_SIZE
     end
@@ -76,8 +77,12 @@ module GalleryModels
     end
 
     def thumb_path(base_path)
+      File.join(base_path, self.thumb_filename)
+    end
+
+    def thumb_filename
       digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}")[(0..8)]
-      File.join(base_path, "#{digest}.#{self.extension}")
+      "#{digest}.#{self.extension}"
     end
 
     def to_s

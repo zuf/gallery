@@ -1,5 +1,5 @@
-<ul>
+<ul class="gallery">
 <% @gallery.pictures.each do |picture| %>
-  <li><a href="/<%= @gallery.dir %>/<%= picture.filename %>"><%= picture.filename %></a></li>
+  <li><a href="<%= picture_url(picture) %>"><img src="<%= thumb_url(picture) %>" alt="<%= picture.title %>" /></a></li>
 <% end %>
 </ul>
