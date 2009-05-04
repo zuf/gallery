@@ -12,7 +12,7 @@ set :thumbnails, Proc.new { File.join(root, "thumbnails") }
 set :thumb_size, 75
 
 not_found do
-  "404! 404!"
+  erb :error_404
 end
 
 # Routes

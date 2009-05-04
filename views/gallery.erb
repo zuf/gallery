@@ -1,3 +1,11 @@
+<div class="header">
+  <h1><%= @gallery.title %></h1>
+
+  <p class="details">
+    <span><%= @gallery.pictures.length %> pictures</span>
+  </p>
+</div>
+
 <ul class="gallery">
 <% @gallery.pictures.each do |picture| %>
   <li><a href="<%= picture_url(picture) %>"><img src="<%= thumb_url(picture) %>" alt="<%= picture.title %>" /></a></li>

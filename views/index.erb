@@ -1,5 +1,7 @@
+<h1>Galleries</h1>
+
 <ul class="galleries">
 <% @galleries.each do |gallery| %>
-  <li><a href="<%= gallery_url(gallery) %>"><%= gallery.title %></a></li>
+  <li><a href="<%= gallery_url(gallery) %>"><span class="title"><%= gallery.title %></span> <span class="count"><%= gallery.pictures.length %> pictures</span></a></li>
 <% end %>
 </ul>
