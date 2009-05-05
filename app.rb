@@ -9,7 +9,6 @@ include GalleryModels
 # Options
 set :pictures,   Proc.new { File.join(root, "pictures") }
 set :thumbnails, Proc.new { File.join(root, "thumbnails") }
-set :thumb_size, 75
 
 not_found do
   erb :error_404
