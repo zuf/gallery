@@ -21,7 +21,7 @@ module GalleryModels
     end
 
     def initialize(path)
-      raise GalleryNotFoundError, "No such file or directory" unless File.directory?(path)
+      raise GalleryNotFoundError, "No such directory" unless File.directory?(path)
 
       begin
         @info = YAML.load_file(File.join(path, "gallery.yml"))
@@ -56,11 +56,13 @@ module GalleryModels
     attr_reader :path, :filename, :extension, :title, :gallery, :thumb_size
 
     def initialize(path, options={})
+      raise PictureNotFoundError, "No such file" unless File.file?(path)
+
       @path       = path
       @filename   = File.basename(path)
       @extension  = self.class.clean_extname(path)
       @title      = File.basename(path)
-      @gallery    = options[:gallery] || Gallery.new(path[/^(.+?)[^\/]+$/, 1])
+      @gallery    = options[:gallery] || Gallery.new(File.dirname(path))
       @thumb_size = options[:thumb_size] || DEFAULT_THUMB_SIZE
     end
 
