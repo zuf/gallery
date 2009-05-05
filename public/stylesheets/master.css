@@ -105,3 +105,17 @@ ul.gallery {
   ul.gallery img {
     display: block;
   }
+
+
+#lightbox_backdrop {
+  position: absolute;
+  top: 0; left: 0;
+  background: #000;
+}
+
+#lightbox {
+  position: absolute;
+  top: 0; left: 0;
+  padding: 5px;
+  background: #eee;
+}
