@@ -12,12 +12,14 @@ module GalleryModels
     def self.all(dir)
       galleries = Array.new
 
-      Dir.entries(dir).sort.each do |entry|
+      Dir.entries(dir).each do |entry|
         path = File.join(dir, entry)
         galleries << self.new(path) if !entry.match(/^\./) && File.directory?(path)
       end
 
-      galleries
+      galleries.sort do |x,y|
+        y.mtime <=> x.mtime
+      end
     end
 
     def initialize(path)
@@ -45,6 +47,11 @@ module GalleryModels
       end
 
       @pictures
+    end
+
+    def mtime
+      @mtime ||= File.mtime(self.path)
+      @mtime
     end
 
     def to_s

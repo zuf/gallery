@@ -2,6 +2,7 @@
   <h1><%= @gallery.title %></h1>
 
   <p class="details">
+    <span><%= format_date(@gallery.mtime) %></span>
     <span><%= @gallery.pictures.length %> pictures</span>
   </p>
 </div>

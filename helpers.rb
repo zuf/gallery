@@ -21,6 +21,10 @@ module Sinatra
     def thumb_url(picture)
       "/thumbs#{picture_url(picture)}"
     end
+
+    def format_date(time)
+      time.strftime "%Y-%m-%d"
+    end
   end
 
   helpers GalleryHelpers

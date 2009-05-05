@@ -2,6 +2,6 @@
 
 <ul class="galleries">
 <% @galleries.each do |gallery| %>
-  <li><a href="<%= gallery_url(gallery) %>"><span class="title"><%= gallery.title %></span> <span class="count"><%= gallery.pictures.length %> pictures</span></a></li>
+  <li><a href="<%= gallery_url(gallery) %>"><span class="title"><%= gallery.title %></span> <em><span><%= format_date gallery.mtime %></span> <span><%= gallery.pictures.length %> pictures</span></em></a></li>
 <% end %>
 </ul>
