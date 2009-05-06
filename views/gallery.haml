@@ -1,0 +1,12 @@
+%div.header
+  %h1= @gallery.title
+
+  %p.details
+    %span= format_date @gallery.mtime
+    %span= @gallery.pictures.length, " pictures"
+
+%ul.gallery
+  - @gallery.pictures.each do |picture|
+    %li
+      %a{ :href => picture_url(picture) }
+        %img{ :src => thumb_url(picture), :alt => picture.title }

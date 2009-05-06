@@ -1,0 +1,10 @@
+%h1 Galleries
+
+%ul.galleries
+  - @galleries.each do |g|
+    %li
+      %a{ :href => gallery_url(g) }
+        %span.title= g.title
+        %em
+          %span= format_date g.mtime
+          %span= g.pictures.length, " pictures"

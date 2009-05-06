@@ -11,13 +11,13 @@ set :pictures,   Proc.new { File.join(root, "pictures") }
 set :thumbnails, Proc.new { File.join(root, "thumbnails") }
 
 not_found do
-  erb :error_404
+  haml :error_404
 end
 
 # Routes
 get '/' do
   @galleries = Gallery.all options.pictures
-  erb :index
+  haml :index
 end
 
 get '/:gallery' do
@@ -29,7 +29,7 @@ get '/:gallery' do
 
   @title = @gallery.title
 
-  erb :gallery
+  haml :gallery
 end
 
 get '/:gallery/:file' do
@@ -42,7 +42,7 @@ get '/:gallery/:file' do
   send_file @picture.path
 end
 
-get '/thumbs/:gallery/:file' do |gallery, file|
+get '/thumbs/:gallery/:file' do
   begin
     @picture = Picture.new(picture_path)
     send_file @picture.thumbnail(options.thumbnails)
