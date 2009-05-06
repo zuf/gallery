@@ -20,6 +20,11 @@ get '/' do
   haml :index
 end
 
+get '/stylesheets/master.css' do
+  header 'Content-Type' => 'text/css; charset=utf-8'
+  sass :stylesheet
+end
+
 get '/:gallery' do
   begin
     @gallery = Gallery.new(gallery_path)
