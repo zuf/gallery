@@ -22,7 +22,7 @@
       * Load a new image.
       * @param {String} src The URI of the new image
       */
-    var _loadImage = function(src, index) {
+    var loadImage = function(src, index) {
       currentIndex = index;
 
       _show();
@@ -30,12 +30,12 @@
       var currentImage = elements.container.find('img');
 
       if (currentImage.attr('src') == src) return;
-      _showLoader();
+      showLoader();
 
       var preloader = new Image;
       preloader.src = src;
       $(preloader).bind('load', function() {
-        _hideLoader();
+        hideLoader();
 
         if (currentImage.length) {
           currentImage.animate({ opacity: 0 }, opts.imageFadeSpeed, null, function() {
@@ -46,7 +46,7 @@
           _processImage(src, preloader.width, preloader.height);
         }
       }).bind('error', function() {
-        _hideLoader();
+        hideLoader();
       });
     };
 
@@ -81,6 +81,9 @@
       currentHeight = height;
     };
 
+    /**
+      * Show the lightbox. Bind keypress events.
+      */
     var _show = function() {
       if (visible) return;
 
@@ -129,7 +132,7 @@
       var help = null;
       if (opts.help) help = $('<p id="'+opts.helpId+'">'+opts.help+'</p>').css({ display: 'none', opacity: 0 });
 
-      backdrop.click(_hide);
+      backdrop.click(hide);
 
       container.append(loader);
       
@@ -146,6 +149,10 @@
       };
     };
 
+    /**
+      * Step to the next or previous picture.
+      * @param {String} [direction='next'] 'next' or 'previous'
+      */
     var step = function(direction) {
       var direction = direction || 'next';
 
@@ -156,11 +163,14 @@
 
       if (newIndex >= 0) {
         var link = links.slice(newIndex, newIndex+1);
-        _loadImage(link.attr('href'), newIndex);
+        loadImage(link.attr('href'), newIndex);
       }
     };
 
-    var _hide = function() {
+    /**
+      * Hide the lightbox. Unbind keypress events.
+      */
+    var hide = function() {
       elements.backdrop.add(elements.container).add(elements.help).animate({ opacity: 0 }, opts.fadeOutSpeed, null, function() {
         $(this).css({ display: 'none' });
         visible = false;
@@ -168,7 +178,11 @@
       });
     };
 
-    var _showLoader = function() {
+    /**
+      * Show the loader. Sets 'working' status to true and positions the
+      * loader within the container before displaying it.
+      */
+    var showLoader = function() {
       var loader     = elements.loader;
       var container  = elements.container;
       var dimensions = opts.loaderDimensions;
@@ -183,24 +197,32 @@
       loader.show();
     };
 
-    var _hideLoader = function() {
+    /**
+      * Hide the loader. Also set 'working' status to false.
+      */
+    var hideLoader = function() {
       working = false;
       elements.loader.hide();
     };
 
+    /**
+      * Handle all keypress events while the lightbox is visible. ESC hides
+      * the lightbox, left arrow steps to the previous picture, right arrow
+      * steps to the next one.
+      */
     var _handleKeypress = function(e) {
       if (working) return;
 
       if (e.keyCode == 37) step('previous');
       else if (e.keyCode == 39) step('next');
-      else if (e.keyCode == 27) _hide();
+      else if (e.keyCode == 27) hide();
     };
 
     // Bind events
     links.each(function(index) {
       var link = $(this);
       link.click(function() {
-        _loadImage(link.attr('href'), index);
+        loadImage(link.attr('href'), index);
         return false;
       });
     });
