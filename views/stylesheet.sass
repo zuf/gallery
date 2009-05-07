@@ -65,13 +65,13 @@ ul.galleries
   :font
     :size 1.4em
     :weight bold
-  border-top= 1px solid !border_color
+  border-top= 1px "solid" !border_color
   a
     +floatfix
     :display block
     padding= 0 !v_margin
     background-color= !bg
-    border= 1px solid !border_color
+    border= 1px "solid" !border_color
     :border-width 0 0 1px
     :line-height 2.4em
     color= !fg
@@ -98,7 +98,7 @@ ul.gallery
       :display block
       :padding 4px
       background-color= !bg
-      border= 1px solid !border_color
+      border= 1px "solid" !border_color
       &:hover
         background-color= !bg_dark
         border-color= !border_color_hl
@@ -108,22 +108,35 @@ ul.gallery
         height= !thumb_size
 
 
-#lightbox_backdrop
+#yalx_backdrop
   :position absolute
   :top 0
   :left 0
   background= !bg_dark
 
-#lightbox
+#yalx
   :position absolute
   :top 0
   :left 0
-  padding= round(!v_margin / 3)
+  padding= 5px
   background= !fg
   img
     :display block
+  .loader
+    :position absolute
+    top= 5px
+    left= 5px
+    :width 32px
+    :height 32px
+    :background url(/images/yalx_loader.gif) 4px 4px no-repeat
 
-img#lightbox_fake
+p#yalx_help
   :position absolute
-  :top 0
+  top= !v_margin
   :left 0
+  :width 100%
+  :text-align center
+  :font
+    :size 1.2em
+    :weight bold
+  :color !fg_light
