@@ -21,7 +21,7 @@ get '/' do
 end
 
 get '/stylesheets/master.css' do
-  header 'Content-Type' => 'text/css; charset=utf-8'
+  headers 'Content-Type' => 'text/css; charset=utf-8'
   sass :stylesheet
 end
 
@@ -32,9 +32,12 @@ get '/:gallery' do
     raise Sinatra::NotFound
   end
 
-  @title = @gallery.title
-
-  haml :gallery
+  if @gallery.pictures.length == 0
+    haml :gallery_no_pictures
+  else
+    @title = @gallery.title
+    haml :gallery
+  end
 end
 
 get '/:gallery/:file' do
