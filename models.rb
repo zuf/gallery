@@ -99,7 +99,11 @@ module GalleryModels
     end
 
     def self.clean_extname(path)
-      File.extname(path)[1..9].downcase
+      begin
+        File.extname(path)[1..9].downcase
+      rescue NoMethodError
+        ""
+      end
     end
   end
 
