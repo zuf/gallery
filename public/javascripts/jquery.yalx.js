@@ -11,7 +11,7 @@
     *     {@link $.fn.YALx.defaults}
     */
   $.fn.YALx = function(opts) {
-    var opts = $.extend({}, $.fn.YALx.defaults, opts);
+    opts = $.extend({}, $.fn.YALx.defaults, opts);
 
     var links = $(this), elements = {};
     var visible = false, working = false, currentIndex = 0;
@@ -41,7 +41,7 @@
           currentImage.animate({ opacity: 0 }, opts.imageFadeSpeed, null, function() {
             elements.container.find('img').remove();
             _processImage(src, preloader.width, preloader.height);
-          })
+          });
         } else {
           _processImage(src, preloader.width, preloader.height);
         }
@@ -165,7 +165,7 @@
       * @param {String} [direction='next'] 'next' or 'previous'
       */
     var step = function(direction) {
-      var direction = direction || 'next';
+      direction = direction || 'next';
 
       var newIndex = -1;
 
