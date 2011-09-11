@@ -3,7 +3,7 @@ module GalleryModels
   require 'RMagick'
   require 'digest/sha1'
 
-  DEFAULT_THUMB_SIZE = 75
+  DEFAULT_THUMB_SIZE = 96
   PICTURE_FILETYPES  = %w{jpg jpeg gif png tif tiff}
 
   class Gallery
@@ -87,6 +87,15 @@ module GalleryModels
 
     def thumb_path(base_path)
       File.join(base_path, self.thumb_filename)
+    end
+
+    def exif_date
+      unless @exif_date_time
+        @exif = EXIFR::JPEG.new @path
+        @exif_date_time = @exif.date_time
+      else
+        @exif_date_time
+      end
     end
 
     def thumb_filename

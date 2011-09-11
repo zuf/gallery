@@ -3,6 +3,9 @@ require 'sinatra'
 
 require 'helpers'
 require 'models'
+require 'sass'
+require 'russian'
+require 'exifr'
 
 include GalleryModels
 
@@ -22,7 +25,7 @@ end
 
 get '/stylesheets/master.css' do
   headers 'Content-Type' => 'text/css; charset=utf-8'
-  sass :stylesheet
+  scss :stylesheet
 end
 
 get '/:gallery' do

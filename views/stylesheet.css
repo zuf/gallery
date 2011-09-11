@@ -1,0 +1,53 @@
+/*
+Syntax error: Invalid CSS after "(": expected variable (e.g. $foo), was "!fontsize = 1em..."
+        on line 20 of views/stylesheet.sass
+
+15: 
+16: =floatfix
+17:   :overflow hidden
+18:   :zoom 1
+19: 
+20: =details-text(!fontsize = 1em, !margin = 0.5em)
+21:   :float right
+22:   :text-align right
+23:   :font
+24:     size= !fontsize
+25:     :weight normal
+
+Backtrace:
+views/stylesheet.sass:20
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/scss/parser.rb:898:in `expected'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/lexer.rb:193:in `expected!'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/parser.rb:448:in `assert_tok'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/parser.rb:317:in `defn_arglist!'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/parser.rb:314:in `loop'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/parser.rb:314:in `defn_arglist!'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/script/parser.rb:102:in `parse_mixin_definition_arglist'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:777:in `parse_mixin_definition'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:547:in `parse_line'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:448:in `build_tree'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:467:in `append_children'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:466:in `each'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:466:in `append_children'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:323:in `_to_tree'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:293:in `_render'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/engine.rb:240:in `render'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin/compiler.rb:319:in `update_stylesheet'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin/compiler.rb:169:in `update_stylesheets'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin/compiler.rb:167:in `each'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin/compiler.rb:167:in `update_stylesheets'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin/compiler.rb:214:in `watch'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin.rb:111:in `send'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/plugin.rb:111:in `method_missing'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/exec.rb:408:in `watch_or_update'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/exec.rb:294:in `process_result'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/exec.rb:41:in `parse'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/../lib/sass/../sass/exec.rb:21:in `parse!'
+/opt/ruby-enterprise/lib/ruby/gems/1.8/gems/sass-3.1.7/bin/sass:8
+/opt/ruby-enterprise/bin/sass:19:in `load'
+/opt/ruby-enterprise/bin/sass:19
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Invalid CSS after \"(\": expected variable (e.g. $foo), was \"!fontsize = 1em...\"\A         on line 20 of views/stylesheet.sass\A \A 15: \A 16: =floatfix\A 17:   :overflow hidden\A 18:   :zoom 1\A 19: \A 20: =details-text(!fontsize = 1em, !margin = 0.5em)\A 21:   :float right\A 22:   :text-align right\A 23:   :font\A 24:     size= !fontsize\A 25:     :weight normal"; }

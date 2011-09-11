@@ -1,0 +1,141 @@
+@import "/stylesheets/reset.css";
+
+$thumb_size: 75px;
+
+$bg: #111111;
+$fg: #eeeeee;
+$bg_dark: black;
+$fg_light: #999999;
+$fg_lighter: #333333;
+$fg_bright: white;
+$border_color: #222222;
+$border_color_hl: #444444;
+$h_margin: 15px;
+$v_margin: 10px;
+
+@mixin floatfix {
+  overflow: hidden;
+  zoom: 1; }
+
+@mixin details-text($fontsize: 1em, $margin: 0.5em) {
+  float: right;
+  text-align: right;
+  font: {
+    size: $fontsize;
+    weight: normal; };
+  color: $fg_light;
+  span {
+    &:after {
+      content: " | ";
+      margin: $margin;
+      color: $fg_lighter; }
+    &:last-child:after {
+      content: "";
+      margin: 0; } } }
+
+body {
+  background: {
+    color: $bg;
+    image: url(/images/bg.gif); };
+  font: 62.5% Arial, sans-serif;
+  color: $fg; }
+
+h1 {
+  margin: $v_margin $h_margin;
+  font: {
+    size: 4em;
+    weight: bold; };
+  text-align: right; }
+
+div.header {
+  @include floatfix;
+  padding: $v_margin $h_margin;
+  background-color: $bg_dark;
+  h1 {
+    float: left;
+    margin: 0;
+    font-size: 2em;
+    text-align: left; }
+  p.details {
+    @include details-text(1.2em); } }
+
+ul.galleries {
+  margin: $h_margin 0;
+  padding: 0;
+  font: {
+    size: 1.4em;
+    weight: bold; };
+  border-top: 1px solid $border_color;
+  a {
+    @include floatfix;
+    display: block;
+    padding: 0 $v_margin;
+    background-color: $bg;
+    border: 1px solid $border_color;
+    border-width: 0 0 1px;
+    line-height: 2.4em;
+    color: $fg;
+    text-decoration: none;
+    &:hover {
+      color: $fg_bright;
+      background-color: $bg_dark;
+      border-color: $border_color_hl; }
+    &:first-child:hover {
+      border-top-width: 1px;
+      margin-top: -1px; }
+    span.title {
+      float: left; }
+    em {
+      @include details-text(0.8em); } } }
+
+ul.gallery {
+  @include floatfix;
+  margin: $v_margin $h_margin $h_margin $v_margin;
+  li {
+    float: left;
+    margin: 0 round($v_margin / 3) round($v_margin / 3) 0;
+    a {
+      display: block;
+      padding: 4px;
+      background-color: $bg;
+      border: 1px solid $border_color;
+      &:hover {
+        background-color: $bg_dark;
+        border-color: $border_color_hl; }
+      img {
+        display: block;
+        width: $thumb_size;
+        height: $thumb_size; } } } }
+
+#yalx_backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: $bg_dark; }
+
+#yalx {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  background: $fg;
+  img {
+    display: block; }
+  .loader {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 32px;
+    height: 32px;
+    background: url(/images/yalx_loader.gif) 4px 4px no-repeat; } }
+
+p#yalx_help {
+  position: fixed;
+  top: $v_margin;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font: {
+    size: 1.2em;
+    weight: bold; };
+  color: $fg_light; }

@@ -3,10 +3,12 @@
 
   %p.details
     %span= format_date @gallery.mtime
-    %span= @gallery.pictures.length, " pictures"
+    %span
+      = @gallery.pictures.length
+      pictures
 
 %ul.gallery
   - @gallery.pictures.each do |picture|
     %li
-      %a{ :href => picture_url(picture) }
-        %img{ :src => thumb_url(picture), :alt => picture.title }
+      %a{ :href => picture_url(picture), :class => "fancybox", :title => "#{picture.exif_date} [#{picture.title}]", :rel => "gallery" }
+        %img{ :src => thumb_url(picture), :alt => "#{picture.exif_date} [#{picture.title}]" }
