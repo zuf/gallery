@@ -8,7 +8,7 @@ $bg_dark: black;
 $fg_light: #999999;
 $fg_lighter: #333333;
 $fg_bright: white;
-$border_color: #222222;
+$border_color: #333;
 $border_color_hl: #444444;
 $h_margin: 15px;
 $v_margin: 10px;
@@ -40,12 +40,24 @@ body {
   font: 62.5% Arial, sans-serif;
   color: $fg; }
 
+.content{
+  max-width: 1144px;
+  margin: auto;
+}
+
 h1 {
   margin: $v_margin $h_margin;
   font: {
     size: 4em;
     weight: bold; };
   text-align: right; }
+  
+h2 {
+  margin: $v_margin $h_margin;
+  font: {
+    size: 1.5em;
+    weight: bold; };
+}
 
 div.header {
   @include floatfix;
@@ -91,14 +103,18 @@ ul.galleries {
 ul.gallery {
   @include floatfix;
   margin: $v_margin $h_margin $h_margin $v_margin;
+  margin: 0;
   li {
     float: left;
-    margin: 0 round($v_margin / 3) round($v_margin / 3) 0;
+    margin: 0 round($v_margin / 3) round($v_margin / 3) 0;    
+    //margin: 0;
     a {
       display: block;
       padding: 4px;
+      //margin: 1px;
       background-color: $bg;
       border: 1px solid $border_color;
+      //border-bottom: 4px solid $border_color;
       &:hover {
         background-color: $bg_dark;
         border-color: $border_color_hl; }
@@ -139,3 +155,18 @@ p#yalx_help {
     size: 1.2em;
     weight: bold; };
   color: $fg_light; }
+
+li.hr
+{
+  margin: 10px 0;
+  padding-top: 2em;
+  clear: both;
+  width: 100%;
+  border-bottom: solid 1px $border_color;
+}
+
+.footer
+{
+  text-align: center;
+  padding: 1em;
+}

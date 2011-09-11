@@ -18,4 +18,7 @@
     %script{ :src => "/javascripts/application.js", :type => "text/javascript", :charset => "utf-8" }
 
   %body
-    = yield
+    .content= yield
+    .footer
+      ©
+      = Time.now.year

@@ -2,13 +2,25 @@
   %h1= @gallery.title
 
   %p.details
-    %span= format_date @gallery.mtime
+    -#%span= format_date @gallery.mtime
+    %span
+      = date_format @gallery.min_time
+      —
+      = date_format @gallery.max_time
     %span
       = @gallery.pictures.length
-      pictures
+      изображений
 
 %ul.gallery
+  - cur_date = nil
   - @gallery.pictures.each do |picture|
+    -if picture.exif_date_time
+      -timestamp = picture.exif_date_time.strftime('%Y%m%d')
+      -if cur_date != timestamp
+        %li.hr
+          %h2= date_format picture.exif_date_time
+        -cur_date = timestamp
     %li
-      %a{ :href => picture_url(picture), :class => "fancybox", :title => "#{picture.exif_date} [#{picture.title}]", :rel => "gallery" }
-        %img{ :src => thumb_url(picture), :alt => "#{picture.exif_date} [#{picture.title}]" }
+      %a{ :href => picture_url(picture), :class => "fancybox", :title => "#{datetime_format picture.exif_date_time} [#{picture.title}]", :rel => "gallery" }
+        %img{ :src => thumb_url(picture), :alt => picture.title }
+

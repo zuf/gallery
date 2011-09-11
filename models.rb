@@ -57,6 +57,28 @@ module GalleryModels
     def to_s
       self.title
     end
+
+    def min_time
+      unless @min_time
+        pictures.each do |picture|
+          @min_time = picture.exif_date_time  if @min_time.nil? || picture.exif_date_time < @min_time
+        end
+        @min_time
+      else
+        @min_time
+      end
+    end
+
+    def max_time
+        unless @max_time
+        pictures.each do |picture|
+          @max_time = picture.exif_date_time  if @max_time.nil? || picture.exif_date_time > @max_time
+        end
+        @max_time
+      else
+        @max_time
+      end
+    end
   end
 
   class Picture
@@ -89,10 +111,10 @@ module GalleryModels
       File.join(base_path, self.thumb_filename)
     end
 
-    def exif_date
+    def exif_date_time
       unless @exif_date_time
-        @exif = EXIFR::JPEG.new @path
-        @exif_date_time = @exif.date_time
+        @exif = EXIFR::JPEG.new path
+        @exif_date_time = @exif.date_time_original || @exif.date_time
       else
         @exif_date_time
       end

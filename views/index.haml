@@ -1,4 +1,4 @@
-%h1 Galleries
+%h1 Фото
 
 %ul.galleries
   - @galleries.each do |g|
@@ -6,7 +6,11 @@
       %a{ :href => gallery_url(g) }
         %span.title= g.title
         %em
-          %span= format_date g.mtime
+          -#%span= format_date g.mtime
+          %span
+            = date_format g.min_time
+            —
+            = date_format g.max_time
           %span
             = g.pictures.length
-            pictures
+            изображений

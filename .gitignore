@@ -1,2 +1,4 @@
 pictures/*.*
 thumbnails/*.*
+/nbproject/private/
+nbproject

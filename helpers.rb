@@ -25,6 +25,14 @@ module Sinatra
     def format_date(time)
       time.strftime "%Y-%m-%d"
     end
+
+    def datetime_format(datetime)
+      Russian::strftime(datetime, "%d %B %Y %H:%M")
+    end
+
+    def date_format(datetime)
+      Russian::strftime(datetime, "%d %B %Y")
+    end
   end
 
   helpers GalleryHelpers

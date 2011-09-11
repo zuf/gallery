@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+#require 'sinatra/r18n'
 
 require 'helpers'
 require 'models'
@@ -12,6 +13,7 @@ include GalleryModels
 # Options
 set :pictures,   Proc.new { File.join(root, "pictures") }
 set :thumbnails, Proc.new { File.join(root, "thumbnails") }
+#set :default_locale, 'ru'
 
 not_found do
   haml :error_404
