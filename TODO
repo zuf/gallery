@@ -1,0 +1,3 @@
+- Replace rmagick with mini_magick
+- Save exif dates in yaml file (gallery_name.yml)
+- Make thumbnails-sprites
