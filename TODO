@@ -1,4 +1,4 @@
-- Replace rmagick with mini_magick
+- Replace rmagick with mini_magick (see https://github.com/gistinc/sprite/blob/master/lib/sprite/image_combiner.rb)
 - Save exif dates in yaml file (gallery_name.yml)
 - Make thumbnails-sprites
 - Basic raw preview
