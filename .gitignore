@@ -2,3 +2,4 @@ pictures/*
 thumbnails/*.*
 /nbproject/private/
 nbproject
+/.sass-cache/

@@ -1,5 +1,7 @@
 %div.header
-  %h1= @gallery.title
+  %h1
+    %a(href="../") ◂
+    = @gallery.title
 
   %p.details
     -#%span= format_date @gallery.mtime

@@ -67,9 +67,12 @@ div.header {
     float: left;
     margin: 0;
     font-size: 2em;
-    text-align: left; }
+    text-align: left; 
+    a{color: $border_color_hl; text-decoration: none;}
+  }
   p.details {
-    @include details-text(1.2em); } }
+    @include details-text(1.2em); }     
+}
 
 ul.galleries {
   margin: $h_margin 0;
