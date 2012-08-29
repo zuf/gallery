@@ -7,10 +7,10 @@
         %span.title= g.title
         %em
           -#%span= format_date g.mtime
-          %span
-            = date_format g.min_time
+          %span            
+            = date_format g.min_time unless g.min_time.nil?
             —
-            = date_format g.max_time
+            = date_format g.max_time unless g.max_time.nil?
           %span
             = g.pictures.length
             изображений

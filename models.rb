@@ -4,7 +4,7 @@ module GalleryModels
   require 'digest/sha1'
 
   DEFAULT_THUMB_SIZE = 96
-  PICTURE_FILETYPES  = %w{jpg jpeg gif png tif tiff}
+  PICTURE_FILETYPES  = %w{jpg jpeg gif png tif tiff cr2}
 
   class Gallery
     attr_reader :path, :dir, :title, :info
@@ -87,19 +87,26 @@ module GalleryModels
     def initialize(path, options={})
       raise PictureNotFoundError, "No such file" unless File.file?(path)
 
+
       @path       = path
       @filename   = File.basename(path)
       @extension  = self.class.clean_extname(path)
-      @title      = File.basename(path)
+      @title      = @filename
       @gallery    = options[:gallery] || Gallery.new(File.dirname(path))
       @thumb_size = options[:thumb_size] || DEFAULT_THUMB_SIZE
     end
 
-    def thumbnail(thumbnails_path)
-      path = self.thumb_path(thumbnails_path)
+    def thumbnail(thumbnails_path, raw_previews_dir=nil)
+      path = self.thumb_path(thumbnails_path, 'jpg')
 
       unless File.file? path
-        image = Magick::Image.read(self.path).first
+        if raw?
+          extract_previews
+          image = Magick::Image.read(self.preview_path(1)).first
+        else      
+          image = Magick::Image.read(self.path).first
+        end
+        
         image.resize_to_fill! self.thumb_size
         image.write(path)
       end
@@ -107,22 +114,63 @@ module GalleryModels
       path
     end
 
-    def thumb_path(base_path)
-      File.join(base_path, self.thumb_filename)
+    def thumb_path(base_path, extension=nil)
+      File.join(base_path, self.thumb_filename(extension))
     end
 
     def exif_date_time
+      #unless @exif_date_time
+      #  @exif = EXIFR::JPEG.new path
+      #  @exif_date_time = @exif.date_time_original || @exif.date_time
+      #else
+      #  @exif_date_time
+      #end
+
+
       unless @exif_date_time
-        @exif = EXIFR::JPEG.new path
-        @exif_date_time = @exif.date_time_original || @exif.date_time
+        @image = Exiv2::ImageFactory.open path
+        @image.read_metadata
+        #@exif_date_time = @exif.date_time_original || @exif.date_time        
+        exif_date = @image.exif_data['Exif.Photo.DateTimeOriginal'] || @image.exif_data['Exif.Photo.DateTimeDigitized'] || @image.exif_data['Exif.Image.DateTime']
+        if exif_date
+          @exif_date_time = DateTime.strptime(exif_date, '%Y:%m:%d %H:%M:%S')
+        else
+          @exif_date_time = File.mtime(path).to_datetime
+        end
+        @exif_date_time 
       else
         @exif_date_time
       end
     end
 
-    def thumb_filename
-      digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}")[(0..8)]
-      "#{digest}.#{self.extension}"
+    def thumb_filename(extension=nil)
+      digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}").to_i.to_s(36)#[(0..8)]
+      "#{digest}.#{extension || self.extension}"
+    end
+    
+    def extract_previews(numbers = [1,3])
+      system "exiv2 -f -l '#{settings.raw_previews}' -e p#{numbers.join(',')} ex '#{path}'"
+    end
+    
+    def preview_path(number=1)
+      #path.gsub(/\.CR2$/i, "-preview#{number}.jpg")
+      File.join settings.raw_previews, filename.gsub(/\.#{extension}$/i, "-preview#{number}.jpg")
+    end  
+    
+    def raw?
+      cr2? # || other raw types
+    end
+    
+    def cr2?
+      @extension == 'cr2'
+    end  
+    
+    def path_to_browser_compatible_format
+      if raw?
+        preview_path(3)
+      else
+        path
+      end
     end
 
     def to_s

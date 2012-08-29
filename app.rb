@@ -10,11 +10,31 @@ require 'russian'
 require 'exifr'
 require 'digest/sha1'
 
+require 'exiv2'
+
+# Time hack
+require 'date'
+class Time
+  def to_datetime
+    # Convert seconds + microseconds into a fractional number of seconds
+    seconds = sec + Rational(usec, 10**6)
+
+    # Convert a UTC offset measured in minutes to one measured in a
+    # fraction of a day.
+    offset = Rational(utc_offset, 60 * 60 * 24)
+    DateTime.new(year, month, day, hour, min, seconds, offset)
+  end
+end
+
+
 include GalleryModels
+
+
 
 # Options
 set :pictures,   Proc.new { File.join(root, "pictures") }
 set :thumbnails, Proc.new { File.join(root, "thumbnails") }
+set :raw_previews, Proc.new { File.join(root, "raw_previews") }
 #set :default_locale, 'ru'
 
 set :cache_server, "localhost:11211"
@@ -32,10 +52,10 @@ end
 
 # Routes
 get '/' do
-  cache 'index' do
-    @galleries = Gallery.all options.pictures
+  #cache 'index' do
+    @galleries = Gallery.all settings.pictures
     haml :index
-  end
+  #end
 end
 
 get '/stylesheets/master.css' do
@@ -44,7 +64,7 @@ get '/stylesheets/master.css' do
 end
 
 get '/:gallery' do
-  cache "g#{Digest::SHA1.hexdigest(gallery_path)}" do
+  #cache "g#{Digest::SHA1.hexdigest(gallery_path)}" do
     begin
       @gallery = Gallery.new(gallery_path)
     rescue GalleryModels::Error
@@ -57,24 +77,26 @@ get '/:gallery' do
       @title = @gallery.title
       haml :gallery
     end
-  end
+  #end
 end
 
 get '/:gallery/:file' do
   begin
     @picture = Picture.new(picture_path)
+    
+    send_file @picture.path_to_browser_compatible_format
+    #send_file @picture.thumbnail(settings.thumbnails)
   rescue GalleryModels::Error
     raise Sinatra::NotFound
   end
-
-  send_file @picture.path
+ 
 end
 
 get '/thumbs/:gallery/:file' do
   #cache "t#{Digest::SHA1.hexdigest(picture_path)}", :expiry => 300, :compress => false do
     begin
         @picture = Picture.new(picture_path)
-        send_file @picture.thumbnail(options.thumbnails)
+        send_file @picture.thumbnail(settings.thumbnails)
     rescue GalleryModels::Error
       raise Sinatra::NotFound
     end

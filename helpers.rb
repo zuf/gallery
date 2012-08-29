@@ -3,11 +3,11 @@ require 'sinatra/base'
 module Sinatra
   module GalleryHelpers
     def gallery_path
-      File.join(options.pictures, params[:gallery])
+      File.join(settings.pictures, params[:gallery])
     end
 
     def picture_path
-      File.join(options.pictures, params[:gallery], params[:file])
+      File.join(settings.pictures, params[:gallery], params[:file])
     end
 
     def gallery_url(gallery)
@@ -15,7 +15,12 @@ module Sinatra
     end
 
     def picture_url(picture)
-      "/#{picture.gallery.dir}/#{picture.filename}"
+      if picture.raw?
+        "/#{picture.gallery.dir}/../#{picture.path_to_browser_compatible_format}"
+        "/#{picture.gallery.dir}/#{picture.filename}"
+      else
+        "/#{picture.gallery.dir}/#{picture.filename}"
+      end
     end
 
     def thumb_url(picture)

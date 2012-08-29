@@ -1,5 +1,6 @@
 pictures/*
 thumbnails/*.*
+raw_previews/*.*
 /nbproject/private/
 nbproject
 /.sass-cache/
