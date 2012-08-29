@@ -1,7 +1,8 @@
 module GalleryModels
   require 'yaml'
-  require 'RMagick'
+  #require 'RMagick'
   require 'digest/sha1'
+  require 'mini_magick'
 
   DEFAULT_THUMB_SIZE = 96
   PICTURE_FILETYPES  = %w{jpg jpeg gif png tif tiff cr2}
@@ -12,14 +13,15 @@ module GalleryModels
     def self.all(dir)
       galleries = Array.new
 
-      Dir.entries(dir).each do |entry|
+      Dir.entries(dir).sort.each do |entry|
         path = File.join(dir, entry)
         galleries << self.new(path) if !entry.match(/^\./) && File.directory?(path)
       end
 
-      galleries.sort do |x,y|
-        y.mtime <=> x.mtime
-      end
+      #galleries.sort do |x,y|
+      #  y.mtime <=> x.mtime
+      #end
+      galleries
     end
 
     def initialize(path)
@@ -40,8 +42,9 @@ module GalleryModels
       unless @pictures
         @pictures = Array.new
 
-        Dir.entries(self.path).sort.each do |entry|
-          path = File.join(self.path, entry)
+        #Dir.entries(self.path).sort.each do |entry|
+        Dir.glob(File.join(self.path, "**", "*")).sort.each do |entry|
+          path = entry #File.join(self.path, entry)
           @pictures << Picture.new(path, :gallery => self) if File.file?(path) && PICTURE_FILETYPES.include?(Picture.clean_extname(path))
         end
       end
@@ -96,22 +99,68 @@ module GalleryModels
       @thumb_size = options[:thumb_size] || DEFAULT_THUMB_SIZE
     end
 
-    def thumbnail(thumbnails_path, raw_previews_dir=nil)
-      path = self.thumb_path(thumbnails_path, 'jpg')
+    def make_thumbnails(thumbnails_path)
+      thumb_path = self.thumb_path(thumbnails_path, 'jpg')
+      half_path = self.thumb_path(half_preview_path, 'jpg')
+    end
 
-      unless File.file? path
+    def thumbnail
+      thumbnails_path =  settings.thumbnails
+      thumb_path = self.thumb_path(thumbnails_path, 'jpg')
+
+      unless File.file? thumb_path
         if raw?
           extract_previews
-          image = Magick::Image.read(self.preview_path(1)).first
+          path_for_magick = self.preview_path(3)#image = Magick::Image.read(self.preview_path(3)).first                   
         else      
-          image = Magick::Image.read(self.path).first
+          #image = Magick::Image.read(self.path).first
+          path_for_magick = self.path
         end
         
-        image.resize_to_fill! self.thumb_size
-        image.write(path)
+        half_path = self.thumb_path(settings.half_previews, 'jpg')
+        
+        image = MiniMagick::Image.open(path_for_magick)
+        image.combine_options do |c|
+          c.resize '50%'
+          c.unsharp '1x2+0.8+0'
+        end
+        image.write(half_path)
+        
+        image = MiniMagick::Image.open(half_path)
+        cols, rows = image[:dimensions]
+        width = self.thumb_size
+        height = self.thumb_size
+        gravity = 'Center'
+        
+        # Cut from Carrier Wave: https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/processing/mini_magick.rb
+        image.combine_options do |cmd|
+          if width != cols || height != rows
+            scale_x = width/cols.to_f
+            scale_y = height/rows.to_f
+            if scale_x >= scale_y
+              cols = (scale_x * (cols + 0.5)).round
+              rows = (scale_x * (rows + 0.5)).round
+              cmd.resize "#{cols}"
+            else
+              cols = (scale_y * (cols + 0.5)).round
+              rows = (scale_y * (rows + 0.5)).round
+              cmd.resize "x#{rows}"
+            end
+          end
+          cmd.gravity gravity
+          cmd.background "rgba(255,255,255,0.0)"
+          cmd.extent "#{width}x#{height}" if cols != width || rows != height
+        
+          cmd.unsharp '1x2+0.8+0'
+        end
+        image.write(thumb_path)
+        
+        #image.resize_to_fill! self.thumb_size
+        #image.unsharp '1x3+1.5+0'
+        #image.write(thumb_path)
       end
 
-      path
+      thumb_path
     end
 
     def thumb_path(base_path, extension=nil)
@@ -144,12 +193,16 @@ module GalleryModels
     end
 
     def thumb_filename(extension=nil)
-      digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}").to_i.to_s(36)#[(0..8)]
+      digest = Digest::SHA1.hexdigest("#{self.gallery.dir}#{self.filename}#{self.thumb_size}")#.to_i.to_s(36) #[(0..8)]
       "#{digest}.#{extension || self.extension}"
     end
     
     def extract_previews(numbers = [1,3])
       system "exiv2 -f -l '#{settings.raw_previews}' -e p#{numbers.join(',')} ex '#{path}'"
+    end
+    
+    def half_preview_path(number=3)
+      File.join settings.half_previews, filename.gsub(/\.#{extension}$/i, "-half-preview#{number}.jpg")
     end
     
     def preview_path(number=1)
@@ -167,7 +220,8 @@ module GalleryModels
     
     def path_to_browser_compatible_format
       if raw?
-        preview_path(3)
+        #preview_path(3)
+        self.thumb_path(settings.half_previews, 'jpg')
       else
         path
       end

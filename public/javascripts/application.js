@@ -1,5 +1,5 @@
 $(function() {
   //$('ul.gallery a').YALx({ easing: "easeOutBack", resizeSpeed: 300 });
-  $('.fancybox').fancybox({titlePosition: 'over'});
+  $('.fancybox').fancybox({titlePosition: 'over', type: 'image'});
   
 });

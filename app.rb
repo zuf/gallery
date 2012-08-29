@@ -35,6 +35,7 @@ include GalleryModels
 set :pictures,   Proc.new { File.join(root, "pictures") }
 set :thumbnails, Proc.new { File.join(root, "thumbnails") }
 set :raw_previews, Proc.new { File.join(root, "raw_previews") }
+set :half_previews, Proc.new { File.join(root, "half_previews") }
 #set :default_locale, 'ru'
 
 set :cache_server, "localhost:11211"
@@ -82,21 +83,18 @@ end
 
 get '/:gallery/:file' do
   begin
-    @picture = Picture.new(picture_path)
-    
+    @picture = Picture.new(picture_path)    
     send_file @picture.path_to_browser_compatible_format
-    #send_file @picture.thumbnail(settings.thumbnails)
   rescue GalleryModels::Error
     raise Sinatra::NotFound
   end
- 
 end
 
 get '/thumbs/:gallery/:file' do
   #cache "t#{Digest::SHA1.hexdigest(picture_path)}", :expiry => 300, :compress => false do
     begin
         @picture = Picture.new(picture_path)
-        send_file @picture.thumbnail(settings.thumbnails)
+        send_file @picture.thumbnail
     rescue GalleryModels::Error
       raise Sinatra::NotFound
     end
