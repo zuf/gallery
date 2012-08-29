@@ -53,10 +53,10 @@ end
 
 # Routes
 get '/' do
-  #cache 'index' do
+  cache 'index' do
     @galleries = Gallery.all settings.pictures
     haml :index
-  #end
+  end
 end
 
 get '/stylesheets/master.css' do
@@ -65,7 +65,7 @@ get '/stylesheets/master.css' do
 end
 
 get '/:gallery' do
-  #cache "g#{Digest::SHA1.hexdigest(gallery_path)}" do
+  cache "g#{Digest::SHA1.hexdigest(gallery_path)}" do
     begin
       @gallery = Gallery.new(gallery_path)
     rescue GalleryModels::Error
@@ -78,7 +78,7 @@ get '/:gallery' do
       @title = @gallery.title
       haml :gallery
     end
-  #end
+  end
 end
 
 get '/:gallery/:file' do
